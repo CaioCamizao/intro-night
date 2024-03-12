@@ -1,21 +1,21 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f8f8f8;
+  background-color: #f5f5f5; /* Branco levemente acinzentado */
   margin: 0;
   padding: 0;
 }
 
 .container {
   max-width: 400px;
-  margin: 20px auto;
+  margin: 20px auto; /* Adiciona espaçamento na parte superior e inferior */
   padding: 20px;
-  background-color: #fff;
+  background-color: #fff; /* Branco */
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
 
 .header {
-  background-color: #ff0000;
+  background-color: #673ab7; /* Roxo escuro */
   color: #fff;
   padding: 20px;
   text-align: center;
@@ -35,20 +35,22 @@ body {
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  color: #555;
+  color: #555; /* Cinza */
 }
 
 .form-group input {
-  width: calc(100% - 22px);
+  width: calc(100% - 22px); /* Ajuste para compensar o padding */
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd; /* Cinza claro */
   border-radius: 4px;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #ddd; /* Correção da borda direita */
+  background-color: #f9f9f9; /* Branco levemente acinzentado */
+  color: #555; /* Cinza */
 }
 
 .btn-submit {
-  background-color: #ff0000;
-  color: #fff;
+  background-color: #ffeb3b; /* Amarelo */
+  color: #111; /* Texto escuro para contraste */
   border: none;
   border-radius: 4px;
   padding: 10px 20px;
@@ -57,7 +59,7 @@ body {
 }
 
 .btn-submit:hover {
-  background-color: #cc0000;
+  background-color: #ffea00; /* Amarelo mais escuro */
 }
 
 ul {
@@ -67,16 +69,16 @@ ul {
 }
 
 li {
-  background-color: #fff;
+  background-color: #f9f9f9; /* Branco levemente acinzentado */
   padding: 20px;
   border-radius: 4px;
   margin-bottom: 10px;
 }
 
 li:nth-child(even) {
-  background-color: #f0f0f0;
+  background-color: #f5f5f5; /* Branco mais acinzentado */
 }
 
 li strong {
-  color: #ff0000;
+  color: #ff9800; /* Laranja */
 }
