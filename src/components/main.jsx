@@ -1,147 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.css';
-import axios from 'axios';
 
 function Main() {
-  const [nomeEstabelecimento, setNomeEstabelecimento] = useState('');
-  const [cep, setCep] = useState('');
-  const [nomeRua, setNomeRua] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [foto, setFoto] = useState(null);
-  const [horaAbertura, setHoraAbertura] = useState('');
-  const [horaFechamento, setHoraFechamento] = useState('');
+  const [term, setTerm] = useState('');
   const [estabelecimentos, setEstabelecimentos] = useState([]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const novoEstabelecimento = {
-      nomeEstabelecimento,
-      cep,
-      nomeRua,
-      telefone,
-      foto,
-      horaAbertura,
-      horaFechamento
-    };
+  useEffect(() => {
+    // Simulação de estabelecimentos
+    const simulatedData = [
+      { 
+        place_id: 1, 
+        name: 'Restaurante A', 
+        vicinity: 'Rua A, 123', 
+        rating: 4.5, 
+        image: 'https://via.placeholder.com/100', 
+        distance: '500m', // Simulação de distância
+        opening_hours: '08:00', // Simulação de horário de abertura
+        closing_hours: '20:00' // Simulação de horário de fechamento
+      },
+      // Outros estabelecimentos...
+    ];
+    setEstabelecimentos(simulatedData);
+  }, []);
 
-    // Adicionar a imagem como um ícone
-    if (foto) {
-      const fotoURL = URL.createObjectURL(foto);
-      novoEstabelecimento.foto = fotoURL;
-    }
-
-    setEstabelecimentos([...estabelecimentos, novoEstabelecimento]);
-
-    console.log("Estabelecimentos:", estabelecimentos);
-
-    // Limpar os campos do formulário
-    setNomeEstabelecimento('');
-    setCep('');
-    setNomeRua('');
-    setTelefone('');
-    setFoto(null);
-    setHoraAbertura('');
-    setHoraFechamento('');
-  };
-
-  const handleCEPBlur = async () => {
-    try {
-      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-      const { logradouro, localidade, uf } = response.data;
-      setNomeRua(logradouro);
-    } catch (error) {
-      console.error("Erro ao buscar endereço:", error);
-    }
-  };
-
-  const formatarTelefone = (telefone) => {
-    // Formatar o telefone no formato (XX) XXXX-XXXX
-    return telefone.replace(/^(\d{2})(\d{4,5})(\d{4})$/, '($1) $2-$3');
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Aqui você pode chamar a função para buscar os estabelecimentos reais
+    // searchNearbyPlaces(term);
   };
 
   return (
     <div className="container">
       <div className="header">
-        <h1>Adicionar Estabelecimento</h1>
+        <h1>Buscar Estabelecimentos Próximos</h1>
       </div>
-      <form onSubmit={handleSubmit}>
+      {/* Formulário de busca (simulado) */}
+      <form onSubmit={handleSearch}>
         <div className="form-group">
-          <label>Nome do Estabelecimento:</label>
+          <label>Termo de Busca:</label>
           <input
             type="text"
-            value={nomeEstabelecimento}
-            onChange={(e) => setNomeEstabelecimento(e.target.value)}
+            value={term}
+            onChange={(e) => setTerm(e.target.value)}
             required
           />
         </div>
-        <div className="form-group">
-          <label>CEP:</label>
-          <input
-            type="text"
-            value={cep}
-            onChange={(e) => setCep(e.target.value)}
-            onBlur={handleCEPBlur}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Nome da Rua:</label>
-          <input
-            type="text"
-            value={nomeRua}
-            onChange={(e) => setNomeRua(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Telefone:</label>
-          <input
-            type="tel"
-            value={formatarTelefone(telefone)}
-            onChange={(e) => setTelefone(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Foto:</label>
-          <input
-            type="file"
-            onChange={(e) => setFoto(e.target.files[0])}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Hora de Abertura:</label>
-          <input
-            type="time"
-            value={horaAbertura}
-            onChange={(e) => setHoraAbertura(e.target.value)}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>Hora de Fechamento:</label>
-          <input
-            type="time"
-            value={horaFechamento}
-            onChange={(e) => setHoraFechamento(e.target.value)}
-            required
-          />
-        </div>
-        <button className="btn-submit" type="submit">Adicionar Estabelecimento</button>
+        <button className="btn-submit" type="submit">Buscar Estabelecimentos</button>
       </form>
       
-      {/* Mostrar a lista de estabelecimentos */}
+      {/* Lista de estabelecimentos */}
       <div className="estabelecimentos">
-        <h2>Estabelecimentos Adicionados:</h2>
-        <ul>
-          {estabelecimentos.map((estabelecimento, index) => (
-            <li key={index}>
-              <strong>{estabelecimento.nomeEstabelecimento}</strong> - {estabelecimento.cep} <br />
-              <img src={estabelecimento.foto} alt="Foto Estabelecimento" width="50" height="50" />
-            </li>
+        <h2>Estabelecimentos Encontrados:</h2>
+        <div className="cards-container">
+          {estabelecimentos.map(estabelecimento => (
+            <div key={estabelecimento.place_id} className="card">
+              <img src={estabelecimento.image} alt="Imagem do Estabelecimento" className="card-image" />
+              <div className="card-info">
+                <h3 className="card-title">{estabelecimento.name}</h3>
+                <p className="card-address">{estabelecimento.vicinity}</p>
+                <p className="card-distance">Distância: {estabelecimento.distance}</p>
+                <p className="card-opening-hours">Aberto: {estabelecimento.opening_hours} - {estabelecimento.closing_hours}</p>
+                <p className="card-rating">Avaliação: {estabelecimento.rating || 'Não disponível'}</p>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
