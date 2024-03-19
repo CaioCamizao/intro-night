@@ -1,73 +1,94 @@
 import React, { useState, useEffect } from 'react';
+import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import './style.css';
 
-function Main() {
-  const [term, setTerm] = useState('');
-  const [estabelecimentos, setEstabelecimentos] = useState([]);
+function App(props) {
+  const [places, setPlaces] = useState([]);
+  const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
-    // Simulação de estabelecimentos
-    const simulatedData = [
-      { 
-        place_id: 1, 
-        name: 'Restaurante A', 
-        vicinity: 'Rua A, 123', 
-        rating: 4.5, 
-        image: 'https://via.placeholder.com/100', 
-        distance: '500m', // Simulação de distância
-        opening_hours: '08:00', // Simulação de horário de abertura
-        closing_hours: '20:00' // Simulação de horário de fechamento
-      },
-      // Outros estabelecimentos...
-    ];
-    setEstabelecimentos(simulatedData);
+    // Solicitar a localização atual do usuário ao carregar o componente
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords;
+          setMapCenter({ lat: latitude, lng: longitude });
+        },
+        error => {
+          console.error('Erro ao obter localização:', error);
+        }
+      );
+    } else {
+      console.error('Geolocalização não suportada.');
+    }
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // Aqui você pode chamar a função para buscar os estabelecimentos reais
-    // searchNearbyPlaces(term);
+  const handleSearch = () => {
+    const service = new props.google.maps.places.PlacesService(document.createElement('div'));
+    const request = {
+      location: mapCenter,
+      radius: '5000',
+      type: ['restaurant']
+    };
+
+    // Limpar os resultados antigos
+    setPlaces([]);
+
+    service.nearbySearch(request, (results, status) => {
+      if (status === props.google.maps.places.PlacesServiceStatus.OK) {
+        setPlaces(results);
+      } else {
+        console.error('Erro ao buscar estabelecimentos:', status);
+      }
+    });
+  };
+
+  const handleMapClick = (mapProps, map, clickEvent) => {
+    // Atualizar o estado do centro do mapa com as coordenadas do local clicado pelo usuário
+    setMapCenter({ lat: clickEvent.latLng.lat(), lng: clickEvent.latLng.lng() });
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1>Buscar Estabelecimentos Próximos</h1>
+    <div className="App">
+      <h1>Localizador de Estabelecimentos</h1>
+      <div className="search-bar">
+        <input type="text" placeholder="Buscar estabelecimentos..." />
+        <button onClick={handleSearch}>Buscar</button>
       </div>
-      {/* Formulário de busca (simulado) */}
-      <form onSubmit={handleSearch}>
-        <div className="form-group">
-          <label>Termo de Busca:</label>
-          <input
-            type="text"
-            value={term}
-            onChange={(e) => setTerm(e.target.value)}
-            required
-          />
-        </div>
-        <button className="btn-submit" type="submit">Buscar Estabelecimentos</button>
-      </form>
-      
-      {/* Lista de estabelecimentos */}
-      <div className="estabelecimentos">
-        <h2>Estabelecimentos Encontrados:</h2>
-        <div className="cards-container">
-          {estabelecimentos.map(estabelecimento => (
-            <div key={estabelecimento.place_id} className="card">
-              <img src={estabelecimento.image} alt="Imagem do Estabelecimento" className="card-image" />
-              <div className="card-info">
-                <h3 className="card-title">{estabelecimento.name}</h3>
-                <p className="card-address">{estabelecimento.vicinity}</p>
-                <p className="card-distance">Distância: {estabelecimento.distance}</p>
-                <p className="card-opening-hours">Aberto: {estabelecimento.opening_hours} - {estabelecimento.closing_hours}</p>
-                <p className="card-rating">Avaliação: {estabelecimento.rating || 'Não disponível'}</p>
-              </div>
-            </div>
+      <div className="map-container">
+        <Map
+          google={props.google}
+          zoom={14}
+          center={mapCenter}
+          onClick={handleMapClick}
+          style={{ width: '100%', height: '300px' }}
+        >
+          {places.map(place => (
+            <Marker
+              key={place.id}
+              name={place.name}
+              position={{ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }}
+            />
           ))}
-        </div>
+        </Map>
+      </div>
+      <div className="place-cards">
+        {places.map(place => (
+          <div key={place.id} className="place-card">
+            <img src={place.icon} alt="Place Icon" />
+            <div className="place-details">
+              <h2>{place.name}</h2>
+              <p>Ranking de Estrelas: {place.rating}</p>
+              <p>Horário de Funcionamento: {place.opening_hours ? place.opening_hours.isOpen() ? 'Aberto agora' : 'Fechado' : 'Horário não informado'}</p>
+              <p>Distância: Calculada a partir da sua localização</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
-export default Main;
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyAR2Gxmx2jcWYWtDgdjSz9SQ5Z8du_0_vY'
+})(App);
