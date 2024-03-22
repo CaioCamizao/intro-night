@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './MenuBar.css'; // Importe seu arquivo CSS para estilização
+import './MenuBar.css';
 import Image from './LocalizaAi.png'
 
 function MenuBar() {

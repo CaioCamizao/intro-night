@@ -5,12 +5,12 @@
   padding: 10px 20px;
   background-color: #f7f7f7;
   color: rgb(0, 0, 0);
-  position: fixed; /* Torna o menu fixo */
-  top: 0px; /* Alinha o menu no topo */
-  left: 0; /* Alinha o menu à esquerda */
-  width: 100%; /* Garante que o menu ocupe toda a largura da tela */
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100%;
   height: 60px;
-  z-index: 1000; /* Garante que o menu fique sobre outros elementos */
+  z-index: 1000;
   border-bottom: 2px solid #000;
 }
 
@@ -20,7 +20,7 @@
 }
 
 .menu-links {
-  flex: 1; /* Permite que os links ocupem o espaço restante */
+  flex: 1;
 }
 
 .menu-links a {
@@ -31,7 +31,7 @@
 }
 
 .menu-actions {
-  margin-right: 40px; /* Ajusta a margem direita para centralizar os botões */
+  margin-right: 40px;
 }
 
 .menu-actions button {
@@ -48,7 +48,6 @@
   margin-right: 10px;
 }
 
-/* Ajuste para o conteúdo abaixo do menu */
 .content {
-  margin-top: 60px; /* Ajuste de margem para evitar que o conteúdo fique oculto sob o menu */
+  margin-top: 60px;
 }
