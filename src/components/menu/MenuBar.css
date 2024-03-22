@@ -1,0 +1,35 @@
+.menu-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+  }
+  
+  .menu-logo img {
+    width: 100px;
+    height: auto;
+  }
+  
+  .menu-links a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+  }
+  
+  .menu-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .menu-actions button:first-child {
+    margin-right: 10px;
+  }
+  
