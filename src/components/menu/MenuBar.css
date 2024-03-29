@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 15px 20px;
   background-color: #f7f7f7;
   color: rgb(0, 0, 0);
   position: fixed;
@@ -15,12 +15,9 @@
 }
 
 .menu-logo img {
-  width: 100px;
+  align-items: center;
+  width: 150px;
   height: auto;
-}
-
-.menu-links {
-  /* Se houver links, você pode adicionar estilos aqui */
 }
 
 .menu-actions {
@@ -29,11 +26,11 @@
 }
 
 .menu-actions input[type="text"] {
-  padding: 10px; /* Reduz o preenchimento */
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 25px;
   margin-right: 10px; 
-  width: 300px; /* Reduz a largura */
+  width: 400px;
 }
 
 .menu-actions button {
@@ -50,10 +47,10 @@
   margin-right: 200px;
 }
 
-.login-button, .senha-button {
+.login-button, .criar-button {
   margin-right: 10px;
 }
 
-.senha-button {
+.criar-button {
   margin-right: 40px;
 }
