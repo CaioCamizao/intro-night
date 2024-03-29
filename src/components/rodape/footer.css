@@ -1,11 +1,12 @@
 .footer {
-  position: fixed; /* Fixa o rodapé */
-  bottom: 0; /* Alinha o rodapé no fundo da página */
-  width: 100%; /* Garante que o rodapé ocupe toda a largura da tela */
-  background-color: #333;
-  color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f7f7f7;
+  color: #000000;
   padding: 5px;
   text-align: center;
+  border-top: 2px solid #000;
 }
 
 .footer-content {

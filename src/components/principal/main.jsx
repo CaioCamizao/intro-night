@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import MenuBar from '../menu/MenuBar';
+
 import './main.css';
 
 function App(props) {
   const [places, setPlaces] = useState([]);
   const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
   const [userLocation, setUserLocation] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -16,7 +19,7 @@ function App(props) {
           setUserLocation({ lat: latitude, lng: longitude });
         },
         error => {
-          console.error('Erro ao obter localização:', error);
+          console.error('Erro ao obter localização:', error.message);
         }
       );
     } else {
@@ -26,24 +29,16 @@ function App(props) {
 
   const handleSearch = () => {
     const service = new props.google.maps.places.PlacesService(document.createElement('div'));
-    const allowedTypes = ['restaurant', 'bar', 'cafe'];
-    const inputType = 'bar';
-    
-    const isValidType = allowedTypes.includes(inputType);
-    
-    if (!isValidType) {
-        console.log('Busca não encontrada');
-        return;
-    }
-    
+    const inputType = searchQuery.toLowerCase();
+  
     const request = {
-        location: mapCenter,
-        radius: '5000',
-        type: [inputType]
+      location: mapCenter,
+      radius: '5000',
+      keyword: inputType // Utilize o valor da busca como keyword
     };
-
+  
     setPlaces([]);
-
+  
     service.nearbySearch(request, (results, status) => {
       if (status === props.google.maps.places.PlacesServiceStatus.OK) {
         const updatedResults = results.map(place => {
@@ -56,7 +51,7 @@ function App(props) {
         console.error('Erro ao buscar estabelecimentos:', status);
       }
     });
-  };
+  };     
 
   const handleMapClick = (mapProps, map, clickEvent) => {
     setMapCenter({ lat: clickEvent.latLng.lat(), lng: clickEvent.latLng.lng() });
@@ -104,11 +99,7 @@ function App(props) {
 
   return (
     <div className="App">
-      <h1>👇 Pesquise AQUI 👇 </h1>
-      <div className="search-bar">
-        <input type="text" placeholder="Buscar estabelecimentos..." />
-        <button onClick={handleSearch}>Buscar</button>
-      </div>
+      <MenuBar onSearch={handleSearch} searchQuery={searchQuery} onSearchQueryChange={setSearchQuery} />
       <div className="map-container">
         <Map
           google={props.google}
@@ -130,7 +121,7 @@ function App(props) {
         {places.map(place => (
           <div key={place.id} className="place-card">
             {place.photos && place.photos.length > 0 && (
-              <img src={place.photos[0].getUrl()} alt="Estabelecimento" />
+              <img src={place.photos[0].getUrl()} alt="Estabelecimento" onError={(e) => {e.target.onerror = null; e.target.src = "placeholder.jpg"}} />
             )}
             <div className="place-details">
               <h2>{place.name}</h2>
